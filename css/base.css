@@ -34,6 +34,15 @@
 * {
   box-sizing: border-box;
 }
+/* Reset: remove the browser's default 8px page margin (it offsets the hero card
+   from the fixed header) and make [hidden] always win. */
+html,
+body {
+  margin: 0;
+}
+[hidden] {
+  display: none !important;
+}
 html {
   background: var(--night);
 }

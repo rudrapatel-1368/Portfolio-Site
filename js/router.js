@@ -99,6 +99,13 @@
   addEventListener('hashchange', () => go(routeOf()));
 
   // first load: deep links (e.g. #/work) skip the loader intro
+  // always begin at the very top (see js/theme-init.js)
+  window.scrollTo(0, 0);
+
+  // safety net: whatever happens with the intro, scrolling is never locked for more than 3.5s
+  setTimeout(() => RP.lenis && RP.lenis.isStopped && lenisUnlockAllowed() && RP.lenis.start(), 3500);
+  const lenisUnlockAllowed = () => !busy; // don't fight the page-change curtain
+
   const start = routeOf();
   if (start !== 'home') {
     $('.loader').remove();

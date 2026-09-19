@@ -85,6 +85,7 @@
             },
           })
           .to('.loader', { yPercent: -100, duration: 1.1, ease: 'expo.inOut' })
+          .add(() => RP.lenis && RP.lenis.start()) // let people scroll while the name is still animating in
           .from('.card', { clipPath: 'inset(45% 30% 45% 30% round 24px)', duration: 1.5, ease: 'expo.inOut' }, '<.1')
           .from('.big .ch', { yPercent: 110, rotate: 6, duration: 1.3, stagger: 0.045 }, '-=.55')
           .from('#me', { yPercent: 14, scale: 0.92, opacity: 0, duration: 1.6 }, '<.1')
