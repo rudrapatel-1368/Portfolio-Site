@@ -71,26 +71,28 @@
     /* ==================== HOME ==================== */
     home(mm) {
       if (RP.state.firstLoad) {
-        // First visit: 000→100 counter, loader slides up, hero card opens, name + photo rise in
+        // First visit: 000→100 counter, loader slides up, hero card opens, name + photo rise in.
+        // (Tuned so the card never sits as a thin strip: it opens fast, while the loader is still leaving.)
         const cnt = { v: 0 };
         gsap
           .timeline({ defaults: { ease: 'expo.out' } })
           .to(cnt, {
             v: 100,
-            duration: 1.3,
+            duration: 1.1,
             ease: 'power2.inOut',
             onUpdate: () => {
               const c = $('.loader .count');
               if (c) c.textContent = String(Math.round(cnt.v)).padStart(3, '0');
             },
           })
-          .to('.loader', { yPercent: -100, duration: 1.1, ease: 'expo.inOut' })
-          .add(() => RP.lenis && RP.lenis.start()) // let people scroll while the name is still animating in
-          .from('.card', { clipPath: 'inset(45% 30% 45% 30% round 24px)', duration: 1.5, ease: 'expo.inOut' }, '<.1')
-          .from('.big .ch', { yPercent: 110, rotate: 6, duration: 1.3, stagger: 0.045 }, '-=.55')
-          .from('#me', { yPercent: 14, scale: 0.92, opacity: 0, duration: 1.6 }, '<.1')
-          .from('.pills li', { x: -30, opacity: 0, duration: 1, stagger: 0.08 }, '<.4')
-          .from('.hdr > *, .blurb, .jp, .scrollcue, .loc', { y: -14, opacity: 0, duration: 1, stagger: 0.05 }, '<')
+          .to('.loader', { yPercent: -100, duration: 0.9, ease: 'expo.inOut' })
+          .addLabel('reveal', '-=0.5') // hero starts opening while the loader is still sliding away
+          .add(() => RP.lenis && RP.lenis.start(), 'reveal+=0.5') // scrolling unlocks as soon as the loader is gone
+          .from('.card', { clipPath: 'inset(22% 14% 22% 14% round 24px)', duration: 1.0, ease: 'expo.out' }, 'reveal')
+          .from('#me', { yPercent: 6, scale: 0.96, opacity: 0, duration: 0.9 }, 'reveal') // photo + name start WITH the card
+          .from('.big .ch', { yPercent: 110, rotate: 6, duration: 1.0, stagger: 0.03 }, 'reveal')
+          .from('.pills li', { x: -30, opacity: 0, duration: 0.9, stagger: 0.07 }, 'reveal+=0.25')
+          .from('.hdr > *, .blurb, .jp, .scrollcue, .loc', { y: -14, opacity: 0, duration: 0.9, stagger: 0.04 }, 'reveal+=0.25')
           .add(() => {
             $('.loader') && $('.loader').remove();
             RP.lenis && RP.lenis.start();

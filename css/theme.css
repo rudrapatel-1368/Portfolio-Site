@@ -341,10 +341,18 @@ body:not([data-route="home"]) .nav a.on {
 .pin .btn:hover {
   color: var(--green-deep);
 }
+/* "Open live app" sits on the always-dark PARSE band, so its colours are fixed
+   rather than theme-dependent: dark text on camel, cream fill on hover. */
 .pin .btn.fill {
   background: var(--camel);
   border-color: var(--camel);
-  color: var(--ink);
+  color: #1c2433;
+}
+.pin .btn.fill::before {
+  background: #efe7d8;
+}
+.pin .btn.fill:hover {
+  color: #3d1018;
 }
 .stage-n {
   color: var(--camel);
