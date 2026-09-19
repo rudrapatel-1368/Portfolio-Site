@@ -89,10 +89,13 @@
           .addLabel('reveal', '-=0.5') // hero starts opening while the loader is still sliding away
           .add(() => RP.lenis && RP.lenis.start(), 'reveal+=0.5') // scrolling unlocks as soon as the loader is gone
           .from('.card', { clipPath: 'inset(22% 14% 22% 14% round 24px)', duration: 1.0, ease: 'expo.out' }, 'reveal')
-          .from('#me', { yPercent: 6, scale: 0.96, opacity: 0, duration: 0.9 }, 'reveal') // photo + name start WITH the card
+          .from('#me', { y: 40, opacity: 0, duration: 0.9 }, 'reveal') // photo + name start WITH the card (y/opacity: the scroll animation owns scale/yPercent)
           .from('.big .ch', { yPercent: 110, rotate: 6, duration: 1.0, stagger: 0.03 }, 'reveal')
           .from('.pills li', { x: -30, opacity: 0, duration: 0.9, stagger: 0.07 }, 'reveal+=0.25')
-          .from('.hdr > *, .blurb, .jp, .scrollcue, .loc', { y: -14, opacity: 0, duration: 0.9, stagger: 0.04 }, 'reveal+=0.25')
+          .from('.hdr > *', { y: -14, opacity: 0, duration: 0.9, stagger: 0.04 }, 'reveal+=0.25')
+          // wipe-in instead of fade-in: the scroll animation fades these out, and two animations
+          // fighting over the same opacity was what made the first scroll stutter
+          .from('.blurb, .jp, .scrollcue, .loc', { clipPath: 'inset(0 0 100% 0)', duration: 0.9, stagger: 0.04 }, 'reveal+=0.25')
           .add(() => {
             $('.loader') && $('.loader').remove();
             RP.lenis && RP.lenis.start();
@@ -102,7 +105,7 @@
         gsap
           .timeline({ defaults: { ease: 'expo.out' }, delay: 0.1 })
           .from('.big .ch', { yPercent: 110, rotate: 6, duration: 1.2, stagger: 0.04 })
-          .from('#me', { yPercent: 10, opacity: 0, duration: 1.3 }, '<.1')
+          .from('#me', { y: 40, opacity: 0, duration: 1.3 }, '<.1')
           .from('.pills li', { x: -30, opacity: 0, duration: 0.9, stagger: 0.07 }, '<.3');
       }
 
@@ -113,11 +116,11 @@
       mm.add('(min-width: 641px)', () => {
         gsap
           .timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: '+=110%', scrub: 1, pin: true } })
-          .to('.card', { inset: 0, borderRadius: 0, ease: 'none' }, 0)
+          .to('.hero', { clipPath: 'inset(0px round 0px)', ease: 'none' }, 0) // open the crop (see css/home.css)
           .to('#me', { scale: 1.12, yPercent: 4, ease: 'none' }, 0)
           .to('.big .ln:first-child', { xPercent: -14, ease: 'none' }, 0)
           .to('.big .ln:last-child', { xPercent: 22, ease: 'none' }, 0)
-          .to('.pills li', { x: -60, opacity: 0, stagger: 0.05, ease: 'none' }, 0)
+          .to('.pills', { x: -60, opacity: 0, ease: 'none' }, 0) // container, not the pills (the intro animates those)
           .to('.blurb, .scrollcue, .loc, .jp', { opacity: 0, y: -20, ease: 'none' }, 0)
           .to('.beam', { xPercent: 60, opacity: 0.3, ease: 'none' }, 0);
       });

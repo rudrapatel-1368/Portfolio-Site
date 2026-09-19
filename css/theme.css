@@ -68,7 +68,7 @@ body {
 }
 .hdr.is-scrolled .nav,
 body:not([data-route="home"]) .nav {
-  background: rgba(239, 231, 216, 0.78);
+  background: rgba(239, 231, 216, 0.95);
   border-color: var(--line);
 }
 .hdr.is-scrolled .nav a,
@@ -112,7 +112,7 @@ body:not([data-route="home"]) .nav a.on {
     linear-gradient(90deg, rgba(30, 8, 12, 0.3), transparent 30%, transparent 70%, rgba(30, 8, 12, 0.25));
 }
 .beam {
-  background: linear-gradient(180deg, rgba(250, 225, 220, 0.28), rgba(250, 225, 220, 0) 70%);
+  background: radial-gradient(50% 60% at 50% 20%, rgba(250, 225, 220, 0.24), rgba(250, 225, 220, 0) 70%);
 }
 .big.back {
   color: var(--sage);
@@ -121,7 +121,8 @@ body:not([data-route="home"]) .nav a.on {
   color: var(--bone);
 }
 .pills li {
-  background: rgba(239, 231, 216, 0.13);
+  background: rgba(239, 231, 216, 0.14);
+  will-change: transform, opacity;
 }
 .pills li:hover {
   background: rgba(239, 231, 216, 0.24);
