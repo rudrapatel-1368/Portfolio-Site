@@ -1,0 +1,143 @@
+/* ======================================================================
+   CONTACT PAGE — contact rows + photo
+   ====================================================================== */
+
+/* contact page */
+.cgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 70px);
+  align-items: start;
+  padding-bottom: clamp(70px, 9vw, 140px);
+}
+.clist {
+  border-top: 1px solid var(--line);
+}
+.crow {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(110px, 0.9fr) minmax(0, 3fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    padding 0.5s var(--ease),
+    color 0.4s;
+}
+.crow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--green);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.crow:hover {
+  color: var(--bone);
+  padding-inline: 20px;
+}
+.crow:hover::before {
+  transform: scaleY(1);
+  transform-origin: 50% 0;
+}
+.crow .mono {
+  color: var(--burgundy);
+  transition: color 0.4s;
+}
+.crow:hover .mono {
+  color: #d7c3a1;
+}
+.crow a.val {
+  font-weight: 700;
+  font-stretch: 104%;
+  font-size: clamp(17px, 1.75vw, 28px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.crow .acts {
+  display: flex;
+  gap: 8px;
+}
+.crow button,
+.crow .open {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+.crow button:hover,
+.crow .open:hover {
+  background: var(--bone);
+  color: var(--green);
+  border-color: var(--bone);
+}
+.cphoto {
+  position: sticky;
+  top: 12vh;
+  margin: 0;
+  aspect-ratio: 3/4;
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--oat);
+}
+.cphoto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cphoto figcaption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  color: rgba(239, 231, 216, 0.9);
+}
+body[data-route="contact"] .contact h2,
+body[data-route="contact"] .contact .mail,
+body[data-route="contact"] .contact .eyebrow {
+  display: none;
+}
+body[data-route="contact"] .contact {
+  padding-top: 30px;
+}
+@media (max-width: 900px) {
+  .cgrid {
+    grid-template-columns: 1fr;
+  }
+  .cphoto {
+    position: relative;
+    top: 0;
+    max-width: 420px;
+  }
+  .crow {
+    grid-template-columns: 1fr auto;
+  }
+  .crow .mono {
+    grid-column: 1 / -1;
+  }
+}
+
+body:not([data-route="home"]) .logo,
+.hdr.is-scrolled .logo {
+  mix-blend-mode: normal;
+  color: var(--green);
+}

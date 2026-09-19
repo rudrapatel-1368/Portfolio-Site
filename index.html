@@ -1,0 +1,731 @@
+`<!doctype html>
+<!--
+  Rudra Patel — portfolio
+  ────────────────────────────────────────────────────────────────────
+  A single-page site with four "pages" (Home, Work, About, Contact).
+  They all live in this file; js/router.js shows one at a time based on
+  the URL hash (#/work, #/about …).
+
+  Folder layout
+    index.html      ← markup only (this file)
+    css/            ← styles, one file per area, loaded in cascade order
+    js/             ← behaviour, one file per job (see comments in each)
+    img/            ← photos (toned to the burgundy palette) + preview image + icons
+
+  Needs internet for Google Fonts + the GSAP / Lenis animation libraries.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Rudra Patel</title>
+    <meta name="description" content="Rudra Patel — CSE student at CSPIT building AI pipelines." />
+
+    <!-- Link previews (WhatsApp, LinkedIn, X, Discord…).
+         After you deploy, replace SITE_URL below with your real address,
+         e.g. https://rudrapatel.vercel.app — previews need a full URL for the image. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Rudra Patel — Portfolio" />
+    <meta property="og:description" content="First-year CSE at CSPIT, building AI pipelines. Chaos in, blueprint out." />
+    <meta property="og:image" content="SITE_URL/img/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="SITE_URL/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@rudra1368patel" />
+    <meta name="theme-color" content="#5A1A24" />
+
+    <!-- Browser tab + home-screen icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+
+    <!-- Fonts: Archivo (display), Gloock (serif accents), Martian Mono (labels), Noto Sans JP (Japanese) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Gloock&family=Martian+Mono:wght@300;400;500&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&text=%E3%83%AB%E3%83%89%E3%83%A9%E3%83%BB%E3%83%91%E3%83%86%E3%83%AB%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%AD%A6%E7%BF%92%E4%B8%AD%E4%BB%95%E4%BA%8B%E7%A7%81%E5%86%99%E7%9C%9F&display=swap"
+    />
+
+    <!-- Start downloading the hero photo immediately -->
+    <link rel="preload" as="image" href="img/hero.webp" fetchpriority="high" />
+
+    <!-- Light/dark mode must be decided before anything paints -->
+    <script src="js/theme-init.js"></script>
+
+    <!-- Styles — ORDER MATTERS: later files override earlier ones -->
+    <!-- tokens, reset, grain, cursor, loader -->
+    <link rel="stylesheet" href="css/base.css" />
+    <!-- top bar -->
+    <link rel="stylesheet" href="css/header.css" />
+    <!-- buttons, headings, page titles, lightbox -->
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/work.css" />
+    <link rel="stylesheet" href="css/about.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/contact.css" />
+    <!-- tablet / phone layouts -->
+    <link rel="stylesheet" href="css/responsive.css" />
+    <!-- burgundy palette (overrides colours above) -->
+    <link rel="stylesheet" href="css/theme.css" />
+    <!-- dark mode -->
+    <link rel="stylesheet" href="css/dark.css" />
+  </head>
+  <body>
+    <!-- ==================================================================
+     FIXED OVERLAYS — film grain, custom cursor, first-load counter, page-change curtain
+     ================================================================== -->
+    <div class="grain" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true">
+      <div class="ring"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="loader" aria-hidden="true">
+      <div class="mono">Rudra Patel — portfolio<br />V.V. Nagar, Gujarat</div>
+      <div class="count">000</div>
+    </div>
+    <div class="curtain" aria-hidden="true">
+      <b><span id="curtainTxt">Work</span></b
+      ><span class="mono" id="curtainIdx">02 / 04</span><span class="jpl" id="curtainJp">仕事</span>
+    </div>
+
+    <!-- ==================================================================
+     HEADER — logo, page links, dark-mode button, "Let's talk"
+     ================================================================== -->
+    <header class="hdr" id="hdr">
+      <a href="#/" class="logo"><i></i>RUDRA PATEL</a>
+      <nav class="nav" aria-label="Pages">
+        <a href="#/" data-nav="home">Home</a><a href="#/work" data-nav="work">Work</a><a href="#/about" data-nav="about">About</a>
+      </nav>
+      <div class="hdr-r">
+        <button class="mode" id="mode" type="button" aria-label="Switch to dark mode">
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg
+          ><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+          </svg></button
+        ><a href="#/contact" class="talk magnetic"
+          ><span>Let's talk</span
+          ><svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.6" /></svg
+        ></a>
+      </div>
+    </header>
+
+    <main>
+      <!-- ==================================================================
+     PAGE 1 · HOME  (#/)  — hero, banners, bento tiles, work cards
+     ================================================================== -->
+
+      <div data-page="home">
+        <!-- Hero card. Layer order: back name (RUDRA) → photo → front name (PATEL) -->
+        <section class="hero">
+          <div class="card" id="card">
+            <div class="beam" aria-hidden="true"></div>
+            <div class="mono loc" data-clock="V.V. Nagar · ">V.V. Nagar · --:-- IST</div>
+            <ul class="pills">
+              <li>AI pipelines</li>
+              <li>Backend · FastAPI</li>
+              <li>Jump serves</li>
+            </ul>
+            <h1 class="big back" aria-label="Rudra Patel">
+              <span class="ln"><span class="w">RUDRA</span></span
+              ><span class="ln"><span class="w">PATEL</span></span>
+            </h1>
+            <img class="me" id="me" fetchpriority="high" src="img/hero.webp" alt="Rudra Patel in a brown shirt and sunglasses, flashing a peace sign" />
+            <div class="big front" aria-hidden="true">
+              <span class="ln"><span class="w">RUDRA</span></span
+              ><span class="ln"><span class="w">PATEL</span></span>
+            </div>
+            <div class="jp" lang="ja" aria-hidden="true">ルドラ・パテル</div>
+            <div class="mono scrollcue" aria-hidden="true"><span class="bar"></span>Scroll</div>
+            <p class="blurb">First-year CSE at CSPIT, building AI pipelines. <em>Chaos in, blueprint out.</em></p>
+          </div>
+        </section>
+
+        <!-- Two tilted scrolling banners; words come from RP.MARQUEE in js/data.js -->
+        <div class="marq" aria-hidden="true"><div class="mtrack" data-dir="-1" data-set="a"></div></div>
+        <div class="marq b" aria-hidden="true"><div class="mtrack" data-dir="1" data-set="b"></div></div>
+
+        <section class="bento wrap">
+          <div class="bgrid">
+            <div class="tile t-hello tilt">
+              <div class="eyebrow mono">Hello</div>
+              <p class="manifesto">
+                I'm Rudra — a first-year CSE student who learns by <em>shipping.</em> My first real project took me from zero web dev to a
+                live five-stage AI pipeline.
+              </p>
+              <a class="btn magnetic" href="#/about">More about me →</a>
+            </div>
+            <figure class="tile t-portrait tilt">
+              <img loading="lazy" decoding="async" class="ht" src="img/tile.webp" alt="Rudra in a black tee, looking to the side" />
+              <figcaption class="mono"><span>Fig. 01</span><span>2026</span></figcaption>
+            </figure>
+            <div class="tile t-clock tilt">
+              <span class="mono">Based in</span>
+              <div>
+                <b class="place">ANAND</b>
+                <p>V.V. Nagar, Gujarat · IST</p>
+              </div>
+            </div>
+            <div class="tile t-now tilt">
+              <span class="mono">Right now</span>
+              <div>
+                <h3>Shipping PARSE v1</h3>
+                <div class="meter"><i style="width: 90%"></i></div>
+                <p>Live on Vercel, polishing the frontend.</p>
+              </div>
+            </div>
+            <div class="tile t-serve tilt">
+              <svg viewBox="0 0 220 110" aria-hidden="true">
+                <line x1="6" y1="100" x2="214" y2="100" stroke="currentColor" stroke-opacity=".3" />
+                <line x1="110" y1="100" x2="110" y2="56" stroke="currentColor" stroke-width="2" />
+                <path
+                  id="miniArc"
+                  d="M14 40 Q 90 6 140 60 T 196 98"
+                  fill="none"
+                  stroke="#5A1A24"
+                  stroke-width="1.6"
+                  stroke-dasharray="4 5"
+                />
+                <circle r="6" fill="#1C2433">
+                  <animateMotion
+                    dur="2.6s"
+                    repeatCount="indefinite"
+                    keyPoints="0;1"
+                    keyTimes="0;1"
+                    calcMode="spline"
+                    keySplines=".3 0 .6 1"
+                  >
+                    <mpath href="#miniArc" />
+                  </animateMotion>
+                </circle>
+              </svg>
+              <div>
+                <h3>Jump serve</h3>
+                <p>Volleyball, every single day.</p>
+              </div>
+            </div>
+            <div class="tile t-stack tilt">
+              <span class="mono">What I build with</span>
+              <div class="chips">
+                <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Pydantic</span
+                ><span class="chip">Gemini API</span><span class="chip">Git</span><span class="chip">C</span
+                ><span class="chip">HTML / CSS</span><span class="chip">Vercel</span>
+              </div>
+            </div>
+            <div class="tile t-jp tilt">
+              <span class="mono">Also learning</span>
+              <div>
+                <b lang="ja">日本語</b>
+                <p>A year and counting.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="hwork wrap">
+          <div class="head">
+            <div>
+              <div class="eyebrow mono">Selected work</div>
+              <h2 class="h2 split">
+                <span class="ln"><span>Things I've</span></span
+                ><span class="ln"
+                  ><span><em>actually</em> built.</span></span
+                >
+              </h2>
+            </div>
+            <a class="btn magnetic" href="#/work">All work →</a>
+          </div>
+          <div class="cards">
+            <a class="wc feat tilt" href="#/work">
+              <div class="row1">
+                <span class="mono">Solo · Live · 2026</span
+                ><span class="arrowc"
+                  ><svg width="14" height="14" viewBox="0 0 12 12" fill="none">
+                    <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.4" /></svg
+                ></span>
+              </div>
+              <div>
+                <h3>PARSE</h3>
+                <p>Plain-text business description in, ranked recommendations and a full implementation blueprint out.</p>
+                <div class="pipe" aria-label="Five stages">
+                  <span>/ingest</span><i></i><span>/structure</span><i></i><span>/recommend</span><i></i><span>/solution</span><i></i
+                  ><span>/export</span>
+                </div>
+              </div>
+            </a>
+            <a class="wc tilt" href="#/work">
+              <div class="row1">
+                <span class="mono">SIH 2026 · Lead</span
+                ><span class="arrowc"
+                  ><svg width="14" height="14" viewBox="0 0 12 12" fill="none">
+                    <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.4" /></svg
+                ></span>
+              </div>
+              <div>
+                <h3>Phishing Detector</h3>
+                <p>ML classifier for phishing domains. Team of six, cleared the university round.</p>
+              </div>
+            </a>
+            <a class="wc tilt" href="#/work">
+              <div class="row1">
+                <span class="mono">CS50x · C</span
+                ><span class="arrowc"
+                  ><svg width="14" height="14" viewBox="0 0 12 12" fill="none">
+                    <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.4" /></svg
+                ></span>
+              </div>
+              <div>
+                <h3>CS50x</h3>
+                <p>Harvard's intro to CS, in C. Psets 0–3 done, data structures next.</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================================================================
+     PAGE 2 · WORK  (#/work)  — PARSE walkthrough, decisions, other projects
+     ================================================================== -->
+
+      <div data-page="work" hidden>
+        <section class="phero wrap">
+          <div class="top mono"><span>02 / 04 — Work</span><span>2026</span></div>
+          <h1 class="ptitle">
+            <span class="ln"><span class="w">Work</span></span>
+          </h1>
+          <div class="sub">
+            <p>One shipped product, one competition build, and a course I'm grinding through. <em>Everything learned by doing.</em></p>
+            <span class="jpt" lang="ja" aria-hidden="true">仕事</span>
+          </div>
+        </section>
+
+        <!-- PARSE: pinned section that scrolls sideways through 7 panels on desktop -->
+        <div class="pin" id="pin">
+          <div class="progress mono">
+            <span>PARSE</span>
+            <div class="rail"><div class="fill" id="pfill"></div></div>
+            <span id="pstage">00 / 05</span>
+          </div>
+          <div class="track" id="track">
+            <article class="panel intro">
+              <div>
+                <h3>PARSE</h3>
+                <p>
+                  Describe your business in plain words. PARSE reads it, structures it, ranks what to fix first, designs the solution and
+                  hands you an implementation document. Solo build, backend to deploy.
+                </p>
+                <div class="row">
+                  <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Pydantic</span
+                  ><span class="chip">Gemini API</span><span class="chip">Mermaid</span><span class="chip">Vercel</span>
+                </div>
+                <div class="row" style="margin-top: 34px">
+                  <a class="btn fill magnetic" href="https://parse-ashen.vercel.app" target="_blank" rel="noopener">Open live app ↗</a
+                  ><a class="btn magnetic" href="https://github.com/rudrapatel-1368" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+              </div>
+            </article>
+            <article class="panel stage">
+              <div>
+                <div class="stage-n">STAGE 01 / 05</div>
+                <h4><code>POST /ingest</code>Listen.</h4>
+                <p>Takes a founder's messy, rambling description exactly as they'd say it out loud. No forms, no dropdowns.</p>
+              </div>
+              <div class="mock">
+                <div class="bar"><i></i><i></i><i></i><span>sample input</span></div>
+                <div class="quote">
+                  "We run three bakery branches and every order comes in over WhatsApp. Half get lost, and I never know which branch is out
+                  of stock<span class="caret"></span>
+                </div>
+              </div>
+            </article>
+            <article class="panel stage">
+              <div>
+                <div class="stage-n">STAGE 02 / 05</div>
+                <h4><code>POST /structure</code>Make sense.</h4>
+                <p>
+                  The model pulls out industry, pain points and constraints. Pydantic checks every field, so the next stage never gets
+                  garbage.
+                </p>
+              </div>
+              <div class="mock">
+                <div class="bar"><i></i><i></i><i></i><span>structured.json</span></div>
+                <span class="c">{</span><br />&nbsp;&nbsp;<span class="k">"industry"</span>:
+                <span class="s">"food retail"</span>,<br />&nbsp;&nbsp;<span class="k">"locations"</span>:
+                <span class="n">3</span>,<br />&nbsp;&nbsp;<span class="k">"pain_points"</span>: [<br />&nbsp;&nbsp;&nbsp;&nbsp;<span
+                  class="s"
+                  >"orders lost in chat"</span
+                >,<br />&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">"no stock visibility"</span><br />&nbsp;&nbsp;],<br />&nbsp;&nbsp;<span
+                  class="k"
+                  >"channel"</span
+                >: <span class="s">"whatsapp"</span><br /><span class="c">}</span>
+              </div>
+            </article>
+            <article class="panel stage">
+              <div>
+                <div class="stage-n">STAGE 03 / 05</div>
+                <h4><code>POST /recommend</code>Rank.</h4>
+                <p>Options get scored by impact against effort, so the first thing you build is the thing that actually matters.</p>
+              </div>
+              <div class="mock">
+                <div class="bar"><i></i><i></i><i></i><span>ranked · sample</span></div>
+                <div class="rank">
+                  <div>
+                    <span class="n">1</span><span class="b"><i style="width: 92%"></i></span><span>0.92</span
+                    ><span class="lbl">Central order inbox</span>
+                  </div>
+                  <div>
+                    <span class="n">2</span><span class="b"><i style="width: 78%"></i></span><span>0.78</span
+                    ><span class="lbl">Shared stock sheet per branch</span>
+                  </div>
+                  <div>
+                    <span class="n">3</span><span class="b"><i style="width: 55%"></i></span><span>0.55</span
+                    ><span class="lbl">Auto-reply order confirmations</span>
+                  </div>
+                  <div>
+                    <span class="n">4</span><span class="b"><i style="width: 31%"></i></span><span>0.31</span
+                    ><span class="lbl">Loyalty program</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="panel stage">
+              <div>
+                <div class="stage-n">STAGE 04 / 05</div>
+                <h4><code>POST /solution</code>Draw it.</h4>
+                <p>A solution blueprint with a Mermaid architecture diagram, so the plan is something you can see, not just read.</p>
+              </div>
+              <div class="mock">
+                <div class="bar"><i></i><i></i><i></i><span>blueprint.mmd</span></div>
+                <div class="flow" id="flow">
+                  <svg aria-hidden="true"></svg>
+                  <div class="nd">WhatsApp</div>
+                  <div class="nd">Web form</div>
+                  <div class="nd">Phone</div>
+                  <div class="nd" style="grid-column: 2">Order inbox</div>
+                  <div class="nd">Branch A</div>
+                  <div class="nd">Branch B</div>
+                  <div class="nd">Branch C</div>
+                </div>
+              </div>
+            </article>
+            <article class="panel stage">
+              <div>
+                <div class="stage-n">STAGE 05 / 05</div>
+                <h4><code>GET /export</code>Hand over.</h4>
+                <p>Everything lands in one implementation document you can hand to a developer, or build from yourself.</p>
+              </div>
+              <div class="mock" style="background: transparent; border: 0; box-shadow: none; padding: 10px 24px 24px 0">
+                <div class="doc">
+                  <div class="mono">implementation.md</div>
+                  <h5>Bakery order system</h5>
+                  <div class="ln" style="width: 92%"></div>
+                  <div class="ln" style="width: 80%"></div>
+                  <div class="ln" style="width: 86%"></div>
+                  <div class="ln" style="width: 40%; background: #1c2433"></div>
+                  <div class="ln" style="width: 74%"></div>
+                  <div class="ln" style="width: 88%"></div>
+                  <div class="ln" style="width: 62%"></div>
+                </div>
+              </div>
+            </article>
+            <article class="panel outro">
+              <div>
+                <h4>Five stages.<br />One person.<br /><span>Zero web dev</span> going in.</h4>
+                <p style="color: var(--dim); margin-top: 24px; max-width: 40ch">
+                  FastAPI, Pydantic, Git and API integration — all learned from scratch to ship this.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <section class="learned wrap">
+          <div class="eyebrow mono">Building it taught me</div>
+          <h2 class="h2 split">
+            <span class="ln"><span>The decisions</span></span
+            ><span class="ln"
+              ><span><em>behind</em> it.</span></span
+            >
+          </h2>
+          <div class="lgrid">
+            <div class="lg">
+              <span class="mono">Choosing the model</span>
+              <h3>Gemini, on purpose</h3>
+              <p>
+                OpenAI had no free tier and wanted a card. Anthropic's API bills separately from a chat plan. Gemini's free tier let me
+                build and test all five stages without paying.
+              </p>
+            </div>
+            <div class="lg">
+              <span class="mono">Keeping stages honest</span>
+              <h3>Pydantic between every step</h3>
+              <p>
+                LLM output is unpredictable. Validating each stage's JSON before passing it on means one bad response fails loudly instead
+                of quietly breaking everything after it.
+              </p>
+            </div>
+            <div class="lg">
+              <span class="mono">From team to solo</span>
+              <h3>Shipped it alone</h3>
+              <p>
+                It started as a hackathon build under the team name Chaos2Commit. When the team split, I kept going and took it from backend
+                to a live deploy.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="index wrap">
+          <div class="eyebrow mono">Also on the desk</div>
+          <div class="rows">
+            <a class="rowi" href="https://github.com/rudrapatel-1368" target="_blank" rel="noopener"
+              ><h3>Phishing Domain Detector</h3>
+              <p>
+                ML classifier that flags phishing domains. SIH 2026, problem CHA-46. Leading a team of six; cleared the university round.
+              </p>
+              <span class="mono">ML · 2026</span
+              ><svg width="26" height="26" viewBox="0 0 12 12" fill="none">
+                <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.2" /></svg
+            ></a>
+            <a class="rowi" href="https://github.com/rudrapatel-1368" target="_blank" rel="noopener"
+              ><h3>CS50x</h3>
+              <p>Harvard's intro to CS in C. Readability, Caesar and the rest of psets 0–3 done; data structures next.</p>
+              <span class="mono">C · Week 5</span
+              ><svg width="26" height="26" viewBox="0 0 12 12" fill="none">
+                <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.2" /></svg
+            ></a>
+            <a class="rowi" href="https://parse-ashen.vercel.app" target="_blank" rel="noopener"
+              ><h3>PARSE</h3>
+              <p>The pipeline above. Backend, frontend and deploy, all solo.</p>
+              <span class="mono">Live · 2026</span
+              ><svg width="26" height="26" viewBox="0 0 12 12" fill="none">
+                <path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.2" /></svg
+            ></a>
+          </div>
+        </section>
+        <a class="next wrap" href="#/about"
+          ><span class="mono">Next page</span
+          ><b
+            >About <svg viewBox="0 0 12 12" fill="none"><path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.4" /></svg></b
+        ></a>
+      </div>
+
+      <!-- ==================================================================
+     PAGE 3 · ABOUT  (#/about)  — intro, volleyball court, "Now"
+     ================================================================== -->
+
+      <div data-page="about" hidden>
+        <section class="phero wrap">
+          <div class="top mono"><span>03 / 04 — About</span><span data-clock="V.V. Nagar · ">V.V. Nagar · --:-- IST</span></div>
+          <h1 class="ptitle">
+            <span class="ln"><span class="w">About</span></span>
+          </h1>
+          <div class="sub">
+            <p>Coder by day, <em>volleyball</em> by evening, Japanese in between.</p>
+            <span class="jpt" lang="ja" aria-hidden="true">私</span>
+          </div>
+        </section>
+        <section class="about wrap">
+          <div class="about-grid">
+            <div>
+              <div class="eyebrow mono">The short version</div>
+              <p class="manifesto wide">
+                I'm Rudra — a first-year computer science student who learns by <em>shipping.</em> I started my first real project knowing
+                zero web dev, and finished with a five-stage AI pipeline running live on the internet. Python since school. C through CS50.
+                Everything else, <em>on the way.</em>
+              </p>
+              <div class="facts">
+                <div class="fact">
+                  <span class="mono">Studying</span><strong>B.Tech CSE<br />CSPIT, CHARUSAT</strong>
+                </div>
+                <div class="fact">
+                  <span class="mono">Building</span><strong>PARSE, live<br />on Vercel</strong>
+                </div>
+                <div class="fact">
+                  <span class="mono">Aiming</span><strong>Masters in<br />AI / ML</strong>
+                </div>
+              </div>
+            </div>
+            <figure class="portrait">
+              <div class="tag mono"><span>Fig. 02</span><span>Mid-turn</span></div>
+              <img loading="lazy" decoding="async" class="ht" src="img/about.webp" alt="Rudra in a grey shirt, eyes closed, caught mid-turn" />
+              <svg class="stamp" viewBox="0 0 100 100" aria-hidden="true">
+                <defs><path id="circ" d="M50 50m-38 0a38 38 0 1 1 76 0a38 38 0 1 1-76 0" /></defs>
+                <text font-family="Martian Mono, monospace" font-size="8.4" letter-spacing="2.2" fill="#EFE7D8">
+                  <textPath href="#circ">LEARN · BUILD · SHIP · REPEAT ·</textPath>
+                </text>
+                <circle cx="50" cy="50" r="5" fill="#A8844B" />
+              </svg>
+            </figure>
+          </div>
+        </section>
+
+        <section class="court wrap">
+          <div class="court-grid">
+            <div>
+              <div class="eyebrow mono">Off the keyboard</div>
+              <h2>Every day,<br /><em>on court.</em></h2>
+              <p>
+                Volleyball is the other half of me. I play daily, and the jump serve is the shot I'm known for — toss high, four-step
+                approach, hit it at the top.
+              </p>
+              <div class="dims">
+                <div><b data-count="18">18</b><span class="mono">m court</span></div>
+                <div><b data-count="9">9</b><span class="mono">m wide</span></div>
+                <div><b data-count="2.43" data-dec="2">2.43</b><span class="mono">m net</span></div>
+              </div>
+            </div>
+            <svg class="court-svg" viewBox="0 0 640 380" aria-label="Side view of a jump serve arcing over the net">
+              <line x1="20" y1="320" x2="620" y2="320" stroke="rgba(26,31,27,.4)" stroke-width="1.5" />
+              <g stroke="rgba(26,31,27,.25)">
+                <line x1="20" y1="320" x2="20" y2="336" />
+                <line x1="320" y1="320" x2="320" y2="336" />
+                <line x1="620" y1="320" x2="620" y2="336" />
+              </g>
+              <text x="20" y="356">END LINE</text>
+              <text x="292" y="356">CENTRE</text>
+              <text x="560" y="356">END LINE</text>
+              <line x1="320" y1="320" x2="320" y2="190" stroke="currentColor" stroke-width="2.5" />
+              <rect x="316" y="190" width="8" height="30" fill="#A8844B" />
+              <text x="332" y="186">2.43 M</text>
+              <path
+                class="arc"
+                d="M40 120 Q 260 40 420 190 T 560 318"
+                fill="none"
+                stroke="#5A1A24"
+                stroke-width="2.5"
+                stroke-dasharray="6 7"
+              />
+              <circle class="ball" cx="40" cy="120" r="11" fill="#A8844B" />
+              <path class="seams" d="M33 114q7 6 14 12M40 109q-4 10 0 22" stroke="#5A1A24" stroke-width="1.4" fill="none" />
+              <text x="36" y="96">CONTACT</text>
+            </svg>
+          </div>
+        </section>
+
+        <section class="now wrap">
+          <div class="eyebrow mono">Now · September 2026</div>
+          <div class="now-grid">
+            <div class="nowc">
+              <span class="mono">Shipping</span>
+              <div>
+                <h3>PARSE v1</h3>
+                <p>Live. Polishing the frontend.</p>
+                <div class="meter"><i style="width: 90%"></i></div>
+              </div>
+            </div>
+            <div class="nowc">
+              <span class="mono">Competing</span>
+              <div>
+                <h3>SIH 2026</h3>
+                <p>Phishing detector, team lead.</p>
+                <div class="meter"><i style="width: 45%"></i></div>
+              </div>
+            </div>
+            <div class="nowc">
+              <span class="mono">Learning</span>
+              <div>
+                <h3>C, via CS50</h3>
+                <p>Paused at Week 5 of 10.</p>
+                <div class="meter"><i style="width: 50%"></i></div>
+              </div>
+            </div>
+            <div class="nowc">
+              <span class="mono">Also learning</span>
+              <div>
+                <h3 lang="ja" style="font-family: var(--jp)">日本語 学習中</h3>
+                <p>A year and counting.</p>
+                <div class="meter"><i style="width: 30%"></i></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <a class="next wrap" href="#/contact"
+          ><span class="mono">Next page</span
+          ><b
+            >Contact <svg viewBox="0 0 12 12" fill="none"><path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.4" /></svg></b
+        ></a>
+      </div>
+
+      <!-- ==================================================================
+     PAGE 4 · CONTACT  (#/contact)  — rows are generated from RP.CONTACT in js/data.js
+     ================================================================== -->
+
+      <div data-page="contact" hidden>
+        <section class="phero wrap">
+          <div class="top mono"><span>04 / 04 — Contact</span><span data-clock="V.V. Nagar · ">V.V. Nagar · --:-- IST</span></div>
+          <h1 class="ptitle">
+            <span class="ln"><span class="w">Contact</span></span>
+          </h1>
+          <div class="sub">
+            <p>Internships, hackathon teams, projects, or just a good idea. <em>Pick a channel.</em></p>
+            <span class="jpt" lang="ja" aria-hidden="true">連絡</span>
+          </div>
+        </section>
+        <section class="wrap cgrid">
+          <div class="clist" id="clist"></div>
+          <figure class="cphoto">
+            <img loading="lazy" decoding="async" src="img/contact.webp" alt="Torch-lit portrait of Rudra against a door" />
+            <figcaption class="mono"><span>Usually on IST</span><span data-time>--:--</span></figcaption>
+          </figure>
+        </section>
+        <a class="next wrap" href="#/"
+          ><span class="mono">Back to start</span
+          ><b
+            >Home <svg viewBox="0 0 12 12" fill="none"><path d="M1 11 11 1M4 1h7v7" stroke="currentColor" stroke-width="1.4" /></svg></b
+        ></a>
+      </div>
+    </main>
+
+    <!-- ==================================================================
+     FOOTER — shown under every page
+     ================================================================== -->
+    <footer class="contact" id="contact">
+      <div class="wrap">
+        <div class="eyebrow mono">Contact</div>
+        <h2>Got a problem<br />worth <em>parsing?</em></h2>
+        <div class="mail">
+          <a class="addr" href="mailto:rudra1368patel@gmail.com">rudra1368patel@gmail.com</a>
+          <button class="copy magnetic" id="copy" type="button">Copy email</button>
+        </div>
+        <div class="foot">
+          <nav aria-label="Profiles">
+            <a href="https://github.com/rudrapatel-1368" target="_blank" rel="noopener">GitHub</a
+            ><a href="https://www.linkedin.com/in/rudra-patel-b9a323414" target="_blank" rel="noopener">LinkedIn</a
+            ><a href="https://x.com/rudra1368patel" target="_blank" rel="noopener">X</a
+            ><a href="https://parse-ashen.vercel.app" target="_blank" rel="noopener">PARSE</a>
+          </nav>
+          <span class="mono">V.V. Nagar · Anand, IN</span>
+        </div>
+      </div>
+      <p class="giant" aria-hidden="true"><span>R</span><span>U</span><span>D</span><span>R</span><span>A</span></p>
+    </footer>
+
+        <!-- ==================================================================
+     SCRIPTS — libraries first, then ours in dependency order
+     ================================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+    <!-- RP namespace + helpers -->
+    <script src="js/utils.js"></script>
+    <!-- editable content: pages, banner words, contact rows -->
+    <script src="js/data.js"></script>
+    <!-- clocks, dark-mode button, copy buttons -->
+    <script src="js/ui.js"></script>
+    <!-- smooth scroll, cursor, hover effects, banners -->
+    <script src="js/motion.js"></script>
+    <!-- per-page scroll animations -->
+    <script src="js/pages.js"></script>
+    <!-- page switching (runs last) -->
+    <script src="js/router.js"></script>
+  </body>
+</html>

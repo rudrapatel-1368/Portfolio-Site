@@ -1,0 +1,222 @@
+/* ======================================================================
+   BASE — fonts, foundation tokens, reset, film grain, custom cursor, loader
+   Loaded first. Defines layout tokens (--gut, --inset, fonts, easing) and
+   the page-level reset. Colour tokens here are the ORIGINAL palette; the
+   active burgundy palette overrides them later in theme.css.
+   ====================================================================== */
+
+@property --r {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+:root {
+  --night: #1e060b;
+  --night-2: #2a0a11;
+  --wine: #3a0c17;
+  --oxblood: #5e1323;
+  --garnet: #a8384b;
+  --rose: #e3a6b0;
+  --blush: #f7ecee;
+  --mint: #bde8d2;
+  --mint-deep: #8fd3b3;
+  --dim: rgba(247, 236, 238, 0.58);
+  --line: rgba(247, 236, 238, 0.13);
+  --display: "Archivo", "Arial Narrow", Impact, sans-serif;
+  --serif: "Gloock", "DM Serif Display", Georgia, serif;
+  --mono: "Martian Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --jp: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --inset: clamp(10px, 2.6vw, 40px);
+  --gut: clamp(16px, 4vw, 64px);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  background: var(--night);
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+body {
+  background: var(--night);
+  color: var(--blush);
+  font-family: var(--display);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+::selection {
+  background: var(--mint);
+  color: var(--night);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+.mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+[data-page][hidden] {
+  display: none !important;
+}
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.085;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1s steps(6) infinite;
+}
+@keyframes grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-3%, 2%);
+  }
+  40% {
+    transform: translate(2%, -4%);
+  }
+  60% {
+    transform: translate(-4%, -1%);
+  }
+  80% {
+    transform: translate(3%, 3%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* cursor: dot + trailing ring only */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  pointer-events: none;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.cursor.on {
+  opacity: 1;
+}
+.cursor .dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--blush);
+  mix-blend-mode: difference;
+}
+.cursor .ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  border: 1px solid rgba(247, 236, 238, 0.45);
+  transition:
+    width 0.35s var(--ease),
+    height 0.35s var(--ease),
+    margin 0.35s var(--ease),
+    border-color 0.35s,
+    opacity 0.3s;
+}
+.cursor.is-link .ring {
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border-color: var(--mint);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cursor {
+    display: block;
+  }
+}
+
+/* loader + page curtain */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: var(--night);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: var(--gut);
+}
+.loader .count {
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(72px, 16vw, 240px);
+  line-height: 0.8;
+  color: var(--mint);
+  font-variant-numeric: tabular-nums;
+}
+.loader .mono {
+  color: var(--dim);
+}
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 94;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  background: var(--mint);
+  color: var(--night);
+  clip-path: inset(100% 0 0 0);
+}
+.curtain b {
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(60px, 15vw, 260px);
+  letter-spacing: -0.05em;
+  line-height: 0.8;
+  text-transform: uppercase;
+  overflow: hidden;
+  display: block;
+  padding-top: 0.05em;
+}
+.curtain b span {
+  display: inline-block;
+}
+.curtain .mono {
+  position: absolute;
+  left: var(--gut);
+  bottom: var(--gut);
+}
+.curtain .jpl {
+  position: absolute;
+  right: var(--gut);
+  bottom: var(--gut);
+  font-family: var(--jp);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+}

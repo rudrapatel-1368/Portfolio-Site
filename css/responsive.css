@@ -1,0 +1,139 @@
+/* ======================================================================
+   RESPONSIVE — tablet (≤900px), phone (≤640px), reduced motion
+   ====================================================================== */
+
+@media (max-width: 900px) {
+  .nav {
+    display: none;
+  }
+  .about-grid,
+  .court-grid,
+  .phero .sub {
+    grid-template-columns: 1fr;
+  }
+  .phero .jpt {
+    justify-self: start;
+  }
+  .portrait {
+    position: relative;
+    top: 0;
+    max-width: 420px;
+  }
+  .now-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cards {
+    grid-template-columns: 1fr;
+  }
+  .wc.feat {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 420px;
+  }
+  .lgrid {
+    grid-template-columns: 1fr;
+  }
+  .lg + .lg {
+    padding-left: 0;
+  }
+  .rowi {
+    grid-template-columns: 1fr 32px;
+  }
+  .rowi p,
+  .rowi .mono {
+    grid-column: 1;
+  }
+  .rowi svg {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .pin {
+    height: auto;
+    min-height: 0;
+  }
+  .progress {
+    display: none;
+  }
+  .track {
+    flex-direction: column;
+    width: auto;
+  }
+  .panel,
+  .panel.intro,
+  .panel.outro {
+    width: auto;
+    height: auto;
+    grid-template-columns: 1fr;
+    padding: 56px var(--gut);
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .panel:first-child {
+    border-top: 0;
+  }
+}
+@media (max-width: 640px) {
+  .me {
+    height: 78%;
+    transform: translateX(-50%);
+  }
+  .pills {
+    top: auto;
+    bottom: calc(19vw * 2 + 40px);
+    gap: 6px;
+  }
+  .pills li {
+    font-size: 13px;
+    padding: 5px 12px 5px 10px;
+  }
+  .blurb,
+  .scrollcue,
+  .loc {
+    display: none;
+  }
+  .big {
+    font-size: 16.5vw;
+    white-space: nowrap;
+  }
+  .big.back {
+    visibility: hidden;
+  }
+  .big.front .ln:first-child {
+    visibility: visible;
+  }
+  .big.front {
+    text-shadow: 0 4px 30px rgba(30, 8, 12, 0.45);
+  }
+  .pills {
+    display: none;
+  }
+  .jp {
+    font-size: 11px;
+  }
+  .facts {
+    grid-template-columns: 1fr;
+  }
+  .fact + .fact {
+    padding-left: 0;
+  }
+  .now-grid {
+    grid-template-columns: 1fr;
+  }
+  .talk span {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+  .manifesto .w {
+    opacity: 1;
+  }
+  .loader {
+    display: none;
+  }
+}

@@ -1,0 +1,116 @@
+/* ======================================================================
+   HEADER — logo, page navigation pill, "Let's talk" button
+   Fixed to the top of every page.
+   ====================================================================== */
+
+/* header */
+.hdr {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(var(--inset) + 18px) calc(var(--inset) + 24px) 0;
+  transition: padding 0.6s var(--ease);
+}
+.hdr.is-scrolled,
+body:not([data-route="home"]) .hdr {
+  padding: 14px var(--gut) 0;
+}
+.logo {
+  font-weight: 800;
+  font-stretch: 118%;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  mix-blend-mode: difference;
+  color: #f7ecee;
+}
+.logo i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(247, 236, 238, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(247, 236, 238, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(247, 236, 238, 0);
+  }
+}
+.nav {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(40, 6, 14, 0.22);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid rgba(247, 236, 238, 0.14);
+}
+.hdr.is-scrolled .nav,
+body:not([data-route="home"]) .nav {
+  background: rgba(30, 6, 11, 0.6);
+}
+.nav a {
+  position: relative;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: rgba(247, 236, 238, 0.8);
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.3s;
+}
+.nav a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--blush);
+  transform: translateY(101%);
+  transition: transform 0.45s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.nav a:hover {
+  color: var(--night);
+}
+.nav a:hover::before {
+  transform: none;
+}
+.nav a.on {
+  background: rgba(247, 236, 238, 0.18);
+  color: var(--blush);
+}
+.talk {
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--mint);
+  color: var(--night);
+  padding: 9px 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  will-change: transform;
+}
+.talk svg {
+  transition: transform 0.4s var(--ease);
+}
+.talk:hover svg {
+  transform: rotate(-45deg);
+}

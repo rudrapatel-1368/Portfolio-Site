@@ -1,0 +1,113 @@
+/* ======================================================================
+   DARK MODE — active when <html data-mode="dark">
+   Swaps the page background to near-black and text to cream.
+   Toggled by the moon/sun button (js/ui.js).
+   ====================================================================== */
+
+/* ===== DARK MODE ===== */
+.court-svg,
+.t-serve svg {
+  color: var(--ink);
+}
+.mode {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--ink-rgb), 0.2);
+  background: var(--page);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    transform 0.5s var(--ease),
+    background 0.3s,
+    border-color 0.3s;
+  flex: none;
+}
+.mode:hover {
+  transform: rotate(-25deg);
+}
+.mode svg {
+  width: 16px;
+  height: 16px;
+}
+.mode .sun {
+  display: none;
+}
+.hdr-r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+html[data-mode="dark"] {
+  --page: #0f0d0e;
+  --ink: #efe7d8;
+  --ink-rgb: 239, 231, 216;
+  --oat: #1b1718;
+  --burgundy: #d69aa3;
+  --dim: rgba(239, 231, 216, 0.58);
+  --line: rgba(239, 231, 216, 0.13);
+  color-scheme: dark;
+}
+html[data-mode="dark"] .mode .sun {
+  display: block;
+}
+html[data-mode="dark"] .mode .moon {
+  display: none;
+}
+html[data-mode="dark"] .loader .count,
+html[data-mode="dark"] .t-jp b {
+  color: var(--rose, #d69aa3);
+}
+html[data-mode="dark"] body:not([data-route="home"]) .logo,
+html[data-mode="dark"] .hdr.is-scrolled .logo {
+  color: var(--ink);
+}
+html[data-mode="dark"] .hdr.is-scrolled .nav,
+html[data-mode="dark"] body:not([data-route="home"]) .nav {
+  background: rgba(20, 17, 18, 0.8);
+}
+html[data-mode="dark"] .hdr.is-scrolled .nav a:hover,
+html[data-mode="dark"] body:not([data-route="home"]) .nav a:hover {
+  color: var(--page);
+}
+html[data-mode="dark"] .tile {
+  background: var(--oat);
+}
+
+html[data-mode="dark"] .phero .jpt {
+  color: transparent;
+  -webkit-text-stroke-color: #d69aa3;
+}
+html[data-mode="dark"] .crow:hover {
+  color: var(--page);
+}
+html[data-mode="dark"] .crow:hover a.val {
+  color: #efe7d8;
+}
+html[data-mode="dark"] .crow::before {
+  background: #7a2c38;
+}
+html[data-mode="dark"] .crow:hover {
+  color: #efe7d8;
+}
+html[data-mode="dark"] .rowi::before,
+html[data-mode="dark"] .next::before {
+  background: #7a2c38;
+}
+html[data-mode="dark"] .contact {
+  background: #1a0a0e;
+}
+
+body,
+.tile,
+.fact,
+.nowc,
+.lg,
+.hero,
+.loader {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}

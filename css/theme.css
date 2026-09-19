@@ -1,0 +1,493 @@
+/* ======================================================================
+   THEME — "Club Burgundy" palette (the palette you actually see)
+   Overrides the base colours: cream page, burgundy + navy accents.
+   Change a colour here (e.g. --green is the burgundy) to recolour the site.
+   ====================================================================== */
+
+/* ===== THEME: Club Burgundy (light lead) ===== */
+:root {
+  --bone: #efe7d8;
+  --oat: #e5dac7;
+  --ink: #1c2433;
+  --green: #5a1a24;
+  --green-2: #7a2c38;
+  --green-deep: #3d1018;
+  --navy: #1c2433;
+  --chambray: #8fa3b8;
+  --ink-rgb: 28, 36, 51;
+  --page: #efe7d8;
+  --burgundy: #5a1a24;
+  --camel: #a8844b;
+  --camel-lt: #d7c3a1;
+  --sage: #d9a9ae;
+  --dim: rgba(var(--ink-rgb), 0.58);
+  --line: rgba(var(--ink-rgb), 0.13);
+  color-scheme: light;
+}
+.card,
+.pin,
+.contact,
+.t-hello,
+.wc.feat,
+.t-now,
+.portrait,
+.t-portrait,
+.curtain {
+  --dim: rgba(239, 231, 216, 0.62);
+  --line: rgba(239, 231, 216, 0.15);
+}
+html,
+body {
+  background: var(--page);
+}
+body {
+  color: var(--ink);
+}
+::selection {
+  background: var(--green);
+  color: var(--bone);
+}
+.grain {
+  opacity: 0.055;
+}
+.cursor .ring {
+  border-color: rgba(var(--ink-rgb), 0.35);
+}
+.cursor.is-link .ring {
+  border-color: var(--burgundy);
+}
+.loader {
+  background: var(--page);
+}
+.loader .count {
+  color: var(--green);
+}
+.curtain {
+  background: var(--green);
+  color: var(--bone);
+}
+.hdr.is-scrolled .nav,
+body:not([data-route="home"]) .nav {
+  background: rgba(239, 231, 216, 0.78);
+  border-color: var(--line);
+}
+.hdr.is-scrolled .nav a,
+body:not([data-route="home"]) .nav a {
+  color: rgba(var(--ink-rgb), 0.75);
+}
+.hdr.is-scrolled .nav a::before,
+body:not([data-route="home"]) .nav a::before {
+  background: var(--ink);
+}
+.hdr.is-scrolled .nav a:hover,
+body:not([data-route="home"]) .nav a:hover {
+  color: var(--bone);
+}
+.hdr.is-scrolled .nav a.on,
+body:not([data-route="home"]) .nav a.on {
+  background: rgba(var(--ink-rgb), 0.09);
+  color: var(--ink);
+}
+.nav a::before {
+  background: var(--bone);
+}
+.nav a:hover {
+  color: var(--green-deep);
+}
+.talk {
+  background: var(--bone);
+  color: var(--green);
+}
+.hero {
+  background: var(--page);
+}
+.card {
+  border: 0;
+  background: radial-gradient(60% 70% at 60% 38%, #9a4450 0%, #7a2c38 34%, #5a1a24 66%, #3d1018 100%);
+  color: var(--bone);
+}
+.card::after {
+  background:
+    radial-gradient(90% 60% at 50% 110%, rgba(30, 8, 12, 0.5), transparent 60%),
+    linear-gradient(90deg, rgba(30, 8, 12, 0.3), transparent 30%, transparent 70%, rgba(30, 8, 12, 0.25));
+}
+.beam {
+  background: linear-gradient(180deg, rgba(250, 225, 220, 0.28), rgba(250, 225, 220, 0) 70%);
+}
+.big.back {
+  color: var(--sage);
+}
+.big.front {
+  color: var(--bone);
+}
+.pills li {
+  background: rgba(239, 231, 216, 0.13);
+}
+.pills li:hover {
+  background: rgba(239, 231, 216, 0.24);
+}
+.pills li::before {
+  background: var(--camel);
+}
+.blurb {
+  color: rgba(239, 231, 216, 0.75);
+}
+.blurb em {
+  color: #e8d6b8;
+}
+.jp,
+.loc,
+.scrollcue {
+  color: rgba(239, 231, 216, 0.72);
+}
+.scrollcue .bar::after {
+  background: var(--camel);
+}
+.marq {
+  background: var(--green);
+  color: var(--bone);
+}
+.marq.b {
+  background: var(--navy);
+  color: var(--bone);
+}
+.eyebrow {
+  color: var(--burgundy);
+}
+.h2 em,
+.manifesto em,
+.phero .sub p em,
+.court h2 em {
+  color: var(--burgundy);
+}
+.btn {
+  border-color: var(--ink);
+}
+.btn::before {
+  background: var(--ink);
+}
+.btn:hover {
+  color: var(--page);
+}
+.btn.fill {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--bone);
+}
+.btn.fill::before {
+  background: var(--ink);
+}
+.chip {
+  color: var(--dim);
+}
+.chip:hover {
+  border-color: var(--green);
+  color: var(--ink);
+  background: rgba(90, 26, 36, 0.06);
+}
+.phero .sub p {
+  color: rgba(var(--ink-rgb), 0.78);
+}
+.phero .jpt {
+  color: var(--oat);
+  -webkit-text-stroke: 1px var(--green-2);
+}
+/* bento */
+.tile {
+  background: var(--oat);
+}
+.tile::before {
+  background: radial-gradient(
+    70% 70% at var(--mx, 80%) var(--my, 10%),
+    rgba(168, 132, 75, 0.35),
+    transparent 65%
+  );
+}
+.tile:hover {
+  border-color: rgba(90, 26, 36, 0.35);
+}
+.tile .mono {
+  color: var(--burgundy);
+}
+.t-hello {
+  background: linear-gradient(150deg, #7a2c38, #4a141e 72%);
+  color: var(--bone);
+}
+.t-hello .mono,
+.t-hello .eyebrow {
+  color: var(--camel-lt);
+}
+.t-hello .manifesto em {
+  color: var(--camel-lt);
+}
+.t-hello .btn {
+  border-color: var(--bone);
+}
+.t-hello .btn::before {
+  background: var(--bone);
+}
+.t-hello .btn:hover {
+  color: var(--green-deep);
+}
+.t-portrait {
+  background: linear-gradient(180deg, #b8cbbd, #557a63 55%, #5a1a24);
+}
+.t-portrait figcaption {
+  color: rgba(239, 231, 216, 0.9);
+}
+.t-clock b {
+  color: var(--ink);
+}
+.t-jp b {
+  color: var(--green);
+}
+.t-now {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--bone);
+}
+.t-now .mono {
+  color: #c9d6e4;
+}
+.t-now p {
+  color: rgba(239, 231, 216, 0.75);
+}
+.t-now .meter {
+  background: rgba(239, 231, 216, 0.2);
+}
+.t-now .meter i {
+  background: var(--camel);
+}
+.t-stack .chip {
+  color: var(--ink);
+}
+/* work cards */
+.wc {
+  background: var(--oat);
+}
+.wc::before {
+  background: radial-gradient(
+    80% 70% at var(--mx, 70%) var(--my, 20%),
+    rgba(168, 132, 75, 0.4),
+    transparent 65%
+  );
+}
+.wc:hover {
+  border-color: rgba(90, 26, 36, 0.4);
+}
+.wc p {
+  color: rgba(var(--ink-rgb), 0.72);
+}
+.wc.feat {
+  background: linear-gradient(135deg, #7a2c38, #3d1018 72%);
+  color: var(--bone);
+}
+.wc.feat h3 {
+  color: var(--bone);
+}
+.wc.feat p {
+  color: rgba(239, 231, 216, 0.75);
+}
+.wc:hover .arrowc {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--bone);
+}
+.wc.feat:hover .arrowc {
+  background: var(--camel);
+  border-color: var(--camel);
+  color: var(--ink);
+}
+.pipe span {
+  border-color: rgba(239, 231, 216, 0.25);
+  background: rgba(0, 0, 0, 0.14);
+}
+.pipe i {
+  background: rgba(239, 231, 216, 0.25);
+}
+.pipe i::after {
+  background: var(--camel);
+}
+
+/* PARSE (dark green band) */
+.pin {
+  background: var(--green-deep);
+  color: var(--bone);
+}
+.progress .fill {
+  background: var(--camel);
+}
+.intro h3 {
+  color: var(--camel-lt);
+}
+.intro p,
+.stage p {
+  color: rgba(239, 231, 216, 0.75);
+}
+.pin .chip {
+  color: rgba(239, 231, 216, 0.65);
+}
+.pin .chip:hover {
+  color: var(--bone);
+  border-color: var(--camel);
+  background: rgba(168, 132, 75, 0.1);
+}
+.pin .btn {
+  border-color: var(--bone);
+}
+.pin .btn::before {
+  background: var(--bone);
+}
+.pin .btn:hover {
+  color: var(--green-deep);
+}
+.pin .btn.fill {
+  background: var(--camel);
+  border-color: var(--camel);
+  color: var(--ink);
+}
+.stage-n {
+  color: var(--camel);
+}
+.stage h4 code {
+  color: var(--camel-lt);
+}
+.mock {
+  background: linear-gradient(180deg, #4a1520, #2c0b12);
+  border-color: rgba(239, 231, 216, 0.1);
+  color: rgba(239, 231, 216, 0.88);
+}
+.mock .k {
+  color: var(--camel-lt);
+}
+.mock .s {
+  color: var(--sage);
+}
+.mock .n {
+  color: #e3a3ab;
+}
+.mock .quote {
+  color: var(--bone);
+}
+.mock .caret {
+  background: var(--camel);
+}
+.rank .b {
+  background: rgba(239, 231, 216, 0.08);
+}
+.rank .b i {
+  background: linear-gradient(90deg, var(--burgundy), var(--camel));
+}
+.rank .lbl {
+  color: rgba(239, 231, 216, 0.75);
+}
+.flow .nd {
+  border-color: rgba(239, 231, 216, 0.22);
+  background: rgba(239, 231, 216, 0.05);
+}
+.flow .nd.hot {
+  background: var(--camel);
+  color: var(--ink);
+  border-color: var(--camel);
+}
+.doc {
+  background: var(--bone);
+  color: var(--ink);
+  box-shadow: 14px 14px 0 var(--burgundy);
+}
+.doc .mono {
+  color: var(--burgundy);
+}
+.doc .ln {
+  background: #ddd3c1;
+}
+.outro h4 span {
+  color: var(--camel-lt);
+}
+/* lists */
+.lg {
+  background: var(--page);
+}
+.lg .mono {
+  color: var(--burgundy);
+}
+.lg p {
+  color: rgba(var(--ink-rgb), 0.72);
+}
+.rowi::before {
+  background: var(--green);
+}
+.rowi:hover {
+  color: var(--bone);
+}
+.fact {
+  background: var(--page);
+}
+.portrait {
+  background: linear-gradient(180deg, #b8cbbd, #557a63 55%, #5a1a24);
+}
+.portrait::before {
+  background: radial-gradient(70% 55% at 50% 40%, rgba(239, 231, 216, 0.25), transparent 70%);
+}
+.portrait .tag {
+  color: rgba(239, 231, 216, 0.85);
+}
+.court p {
+  color: rgba(var(--ink-rgb), 0.72);
+}
+.court-svg text {
+  fill: rgba(var(--ink-rgb), 0.55);
+}
+.nowc {
+  background: var(--page);
+}
+.nowc:hover {
+  background: var(--oat);
+}
+.nowc .mono {
+  color: var(--burgundy);
+}
+.meter {
+  background: rgba(var(--ink-rgb), 0.1);
+}
+.meter i {
+  background: var(--green);
+}
+
+.next::before {
+  background: var(--green);
+}
+.next:hover {
+  color: var(--bone);
+}
+.next:hover .mono {
+  color: rgba(239, 231, 216, 0.7);
+}
+/* footer */
+.contact {
+  background: var(--green-deep);
+  color: var(--bone);
+}
+.contact .eyebrow {
+  color: var(--camel-lt);
+}
+.contact h2 em {
+  color: var(--camel-lt);
+}
+.mail {
+  border-bottom-color: rgba(239, 231, 216, 0.18);
+}
+.mail a.addr {
+  background-image: linear-gradient(var(--camel), var(--camel));
+}
+.copy {
+  border-color: var(--bone);
+  color: var(--bone);
+}
+.copy:hover {
+  background: var(--bone);
+  color: var(--green-deep);
+}
+.giant {
+  color: var(--bone);
+}

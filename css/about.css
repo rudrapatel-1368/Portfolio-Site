@@ -1,0 +1,207 @@
+/* ======================================================================
+   ABOUT PAGE — intro + portrait, volleyball court, "Now" cards
+   ====================================================================== */
+
+/* about page */
+.about {
+  padding-block: clamp(40px, 6vw, 100px) clamp(80px, 10vw, 160px);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 90px);
+  align-items: start;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  margin-top: clamp(40px, 6vw, 90px);
+  border-block: 1px solid var(--line);
+}
+.fact {
+  background: var(--night);
+  padding: 22px 18px 22px 0;
+  display: grid;
+  gap: 10px;
+}
+.fact + .fact {
+  padding-left: 18px;
+}
+.fact .mono {
+  color: var(--dim);
+}
+.fact strong {
+  font-weight: 700;
+  font-stretch: 110%;
+  font-size: clamp(18px, 1.6vw, 24px);
+  line-height: 1.15;
+}
+.portrait {
+  position: sticky;
+  top: 12vh;
+  aspect-ratio: 3/4;
+  max-width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #3a0c17, #1b050a);
+  margin: 0;
+}
+.portrait::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 55% at 50% 40%, rgba(189, 232, 210, 0.16), transparent 70%);
+}
+.portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  will-change: transform;
+}
+.portrait .tag {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--dim);
+}
+.portrait .stamp {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 96px;
+  height: 96px;
+  animation: spin 14s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.court {
+  padding-block: clamp(80px, 10vw, 160px);
+  border-top: 1px solid var(--line);
+}
+.court-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: clamp(28px, 5vw, 90px);
+  align-items: center;
+}
+.court h2 {
+  margin: 18px 0 0;
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(48px, 7.4vw, 124px);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+.court h2 em {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--mint);
+  letter-spacing: -0.02em;
+}
+.court p {
+  color: rgba(247, 236, 238, 0.72);
+  font-size: clamp(16px, 1.3vw, 19px);
+  max-width: 42ch;
+  margin: 26px 0 0;
+}
+.court-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.court-svg text {
+  font-family: var(--mono);
+  font-size: 11px;
+  fill: rgba(247, 236, 238, 0.55);
+  letter-spacing: 0.06em;
+}
+.dims {
+  display: flex;
+  gap: 28px;
+  margin-top: 34px;
+  flex-wrap: wrap;
+}
+.dims div {
+  display: grid;
+  gap: 4px;
+}
+.dims b {
+  font-weight: 800;
+  font-stretch: 120%;
+  font-size: clamp(28px, 3vw, 44px);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.dims span {
+  color: var(--dim);
+}
+
+.now {
+  padding-block: clamp(80px, 10vw, 160px);
+}
+.now-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+  margin-top: 36px;
+}
+.nowc {
+  background: var(--night);
+  padding: clamp(20px, 2.4vw, 34px);
+  display: grid;
+  gap: 40px;
+  align-content: space-between;
+  min-height: 250px;
+  transition: background 0.5s;
+}
+.nowc:hover {
+  background: var(--night-2);
+}
+.nowc .mono {
+  color: var(--rose);
+}
+.nowc h3 {
+  margin: 0;
+  font-weight: 700;
+  font-stretch: 108%;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.nowc p {
+  margin: 10px 0 0;
+  color: var(--dim);
+  font-size: 14.5px;
+}
+.meter {
+  height: 4px;
+  background: rgba(255, 220, 228, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+.meter i {
+  display: block;
+  height: 100%;
+  background: var(--mint);
+  transform-origin: 0 50%;
+}
